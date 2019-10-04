@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
+const adminPath = require('path').resolve('./lib/admin.html');
 
-exports.index = (req, res) =>{
-  res.sendFile(path.resolve('./lib/auth/admin.html'));
+exports.index = (req, res) => {
+  res.sendFile(adminPath);
 };

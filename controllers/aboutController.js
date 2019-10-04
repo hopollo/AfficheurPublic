@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
+const aboutPath = require('path').resolve('./lib/about.html');
 
 exports.index = (req, res) => {
-  res.sendFile(path.resolve('./lib/about.html'));
+  res.sendFile(aboutPath);
 };

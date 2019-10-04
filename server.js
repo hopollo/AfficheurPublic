@@ -1,34 +1,37 @@
 'use strict';
+
 require('dotenv').config();
-const helmet = require('helmet');
-const compression = require('compression');
 const http = require('http');
 const express = require('express');
 const watch = require('node-watch');
 
 const record = require('./lib/utils/record/record');
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/indexRouter');
+const aboutRouter = require('./routes/aboutRouter');
+const adminRouter = require('./routes/adminRouter');
+const publicRouter = require('./routes/publicRouter');
 
 const app = express();
 const port = process.env.SERVER_PORT || 5000;
 
+
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/lib'));
+
 app.use('/', indexRouter);
-
-app.use(express.urlencoded({ extended: false }));
-app.use(helmet());
-app.use(compression());
-app.use(express.json());
-
-// Static files Config
-app.use(express.static('public/'));
-app.use(express.static('lib/'));
-app.use(express.static('routes/'));
+app.use('/about', aboutRouter);
+app.use('/admin', adminRouter);
+app.use('/:dir', publicRouter);
 
 
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
+
 
 server.listen(port, () => {
   record(`Serveur opérationnel sur le port : ${port}`);
