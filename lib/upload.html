@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Afficheur: Upload</title>
+  <style>
+    form {
+      border: dotted 3px grey;
+      background: black;
+      color: white;
+      font-weight: bold;
+    }
+
+    form > * {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h3>Important: Vous êtes sur le point d'utiliser le transfert intergé en version d'essaie, des erreures peuvent survenir.</h3>
+    <p>Assurez-vous que votre fichier ne requier pas de modifications après envoi, car elles ne sont pas encore disponibles actuellement.</p>
+  </div>
+  <form method='POST' enctype='multipart/form-data'>
+    <label for="upload">Fichier source :</label>
+    <input type="file" name="file" id="fileInput"/>
+    <!-- Mot de passe : <input id='passInput' type="password"> -->
+    <button id='sendButton' type="submit" disabled>Valider</button>
+  </form>
+
+  <script>
+    const sendButton = document.getElementById('sendButton');
+    const passInput = document.getElementById('passInput');
+    const fileInput = document.getElementById('fileInput');
+
+    fileInput.addEventListener("input", () => {
+      sendButton.removeAttribute('disabled');
+    });
+
+    /*
+    passInput.addEventListener("input", function() {
+      // TODO : HoPollo Tweak feature to disable back button if pass under limit
+      if (passInput.value.length >= 4) sendButton.removeAttribute('disabled');
+    })
+    */
+
+    document.querySelector('form').onsubmit = () => {
+      console.log('Athenticaing...')
+      fetch('upload', {
+        method: 'POST',
+        headers : {
+          "Authorization" : passInput.value
+        },
+        body: new FormData(this)
+      })
+      .then(res => console.log(res))
+      .catch(err => console.error(err))
+    }
+  </script>
+</body>
+</html>

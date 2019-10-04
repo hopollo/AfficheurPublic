@@ -1,0 +1,7 @@
+GET  http://localhost:5000/users
+Authorization: root
+
+####
+
+POST http://localhost:5000/upload
+Authorization: root
