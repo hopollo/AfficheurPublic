@@ -18,6 +18,7 @@ const port = process.env.SERVER_PORT || 5000;
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.set('layout', 'layouts/layout');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -26,11 +27,10 @@ app.use('/about', aboutRouter);
 app.use('/admin', adminRouter);
 app.use('/:dir', publicRouter);
 
-
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
+const mongo = require('./lib/utils/database/mongodbClient').connect();
 const io = require('socket.io').listen(server);
-
 
 server.listen(port, () => {
   record(`Serveur opérationnel sur le port : ${port}`);
