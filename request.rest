@@ -1,7 +1,7 @@
-GET  http://localhost:5000/users
+GET  http://localhost:5000/administration/
 Authorization: root
 
 ####
 
-POST http://localhost:5000/upload
-Authorization: root
+POST http://localhost:5000/cdi/upload
+Authorization: hopollo|pollo
