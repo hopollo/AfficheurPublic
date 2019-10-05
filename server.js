@@ -29,7 +29,7 @@ app.use('/:dir', publicRouter);
 
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
-const mongo = require('./lib/utils/database/mongodbClient').connect();
+const mongo = require('./lib/utils/database/dbManager').connect();
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => {
