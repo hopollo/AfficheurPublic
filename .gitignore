@@ -2,6 +2,7 @@
 .vscode
 node_modules
 backups
-logs/
-public/
-request.rest
+**/views/*.html
+**/logs
+**/public
+*.rest
