@@ -8,12 +8,17 @@
 
 <ul>
   <li><b>Afficheur Public</b></li>
-  <li>Version : 1.4</li>
+  <li>Version : 1.4 | <span id="lastestVersion"></span></li>
   <li>Git Repo : <a href="https://github.com/hopollo/AfficheurPublic">Manual Updates</a></li>
   <li>Author : <a href="https://www.twitter.com/hopollotv" about="_blank">@HoPolloTV</a></li>
   <li><b>NodeJS + HTTP + Express + FS + Node-Watch + Sockets.io + Compression + Helmet</b>
   <li>Usage : <b>npm run server</b></li>
 </ul>
 
-
-
+<script>
+  fetch('https://raw.githubusercontent.com/hopollo/AfficheurPublic/master/public/exterieur/Horaires%20Bus.txt', { 
+    mode: 'no-cors'
+  })
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+</script>
