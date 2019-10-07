@@ -2,14 +2,14 @@
 Afficheur Public propulsé par NodeJS
 
 ## What is this ?
-This project is mean to display to webclients clients informations as fullscreened sliders  
-Each folders inside /public will result as a view. (http://localhost:port/VIEW)  
-Each files in a view folder will result as a dedicated slider + basic common page skelleton (clock on the bottom)  
-Sockets are injected in every VIEWS, that mean whenever someone upload the view folder all clients will autorefresh the page right away.  
+This project is meant to display to webclients informations as fullscreened sliders (same as airports big screens ads)  
+Each folders inside **"/public"** will result as a **view**. (http://localhost:port/VIEW)  
+Each files in a view folder will result as a **dedicated slider** + basic common page skelleton (clock on the bottom)  
+**Sockets** are injected in every VIEWS, that means whenever someone upload the view folder all clients will **autorefresh the page right away**.  
 Each views can recieve files changes from server manipulation iteself and/or from url (http://localhost:port/VIEW/upload | http://localhost:port/VIEW/delete)  
-Each VIEW modification from distance (web url) need go get authenticated by the database (afficheurdb) inside mongodb (collection: users)  
-Each USER is made from this pattern inside mongodb : ({'user':'ChoosenUserID','pass':'ChoosenUserPassword','access':'AdminChooseFolderAccess'})  
-(Every users can get (see) any views but only editing it will be restricted)  
+Each VIEW modification from distance (web url) need go get **authenticated** by the database (afficheurdb) inside mongodb (collection: users)  
+Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID','pass':'ChoosenUserPassword','access':'AdminChooseFolderAccess'})  
+(Every users **can get (see) any views** but only **editing it will be restricted**)  
 
 ## TODOs : 
 /lib/upload.html
