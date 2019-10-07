@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Afficheur: Delete</title>
+  <style>
+    div, ul {
+      border: dotted 3px grey;
+      background: black;
+      color: white;
+      font-weight: bold;
+    }
+    div > * { display: block; }
+    h3 { color: red; }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Suppression(s) de Fichier(s) :</h1>
+    Identifiant : <input id='idInput' type="text">
+    Mot de passe : <input id='passInput' type="password">
+
+    <button id='sendButton' type="submit" disabled>Valider</button>
+  </div>
+  <h3 id="fetchResult"></h3>
+  <script>
+    const idInput = document.getElementById('idInput');
+    const passInput = document.getElementById('passInput');
+    const sendButton = document.getElementById('sendButton');
+    const result = document.getElementById('fetchResult');
+    
+    passInput.addEventListener("input", () => {
+      // TODO : HoPollo Tweak feature to disable back button if pass under limit
+      if (passInput.value.length >= 4
+          && idInput.value.length >= 3) sendButton.removeAttribute('disabled');
+    });
+
+    sendButton.onclick = () => {
+      try {
+        fetch('delete/files', {
+          headers : {
+            authorization: `${idInput.value}|${passInput.value}`
+          }
+        })
+        .then(res => res.text())
+        .then(data => {
+          if (!data.includes('[')) return document.querySelector('#fetchResult').innerHTML = data;
+          data = JSON.parse(data);
+          
+          const ul = document.createElement('ul');
+          result.appendChild(ul);
+          
+          for (_ in data) {
+            const li = document.createElement('li');
+            li.appendChild(document.createTextNode(data[_]))
+            const delButton = document.createElement('button');
+            delButton.className = 'delButton';
+            delButton.appendChild(document.createTextNode('X'));
+            li.appendChild(delButton);
+            ul.appendChild(li);
+          }
+          const exitButton = document.createElement('a');
+          exitButton.href = location.href.replace('/delete', '');
+          exitButton.appendChild(document.createTextNode('Sortie'));
+          result.appendChild(exitButton);
+        })
+      } catch (err) { console.error(err); }
+    }
+
+    document.addEventListener('click',function(e){
+      if(e.target && e.target.className != 'delButton') return;
+      const itemToDelete = e.target.parentElement.firstChild.data;
+      const formData = new FormData();
+      formData.append('fileToRemove', itemToDelete);
+      
+      fetch('delete', {
+        method: 'DELETE',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        //TODO (HoPollo) : Dynamicly remove item from ul
+        result.innerHTML = data;
+      })
+      .catch(err => console.error(err));
+   });
+  </script>
+</body>
+</html>

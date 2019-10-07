@@ -3,16 +3,11 @@
 const record = require('../lib/utils/record/record');
 const DirPageBuilder = require('../lib/utils/builder/dirPageBuilder');
 const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder');
-const multer = require('multer');
+const DeletePageGetFiles = require('../lib/utils/builder/deletePageBuilder');
+const fs = require('fs');
 const path = require('path');
 
-// Multer Config
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, next) => next(null, path.resolve('./public' + req.baseUrl)),
-    filename: (req, file, next) => next(null, file.originalname)
-  })
-});
+
 
 exports.index = (req, res) => {
   DirPageBuilder(req, res);
@@ -22,7 +17,23 @@ exports.upload_get = (req, res) => {
   UploadPageBuilder(req, res);
 }
 
-exports.upload_post = upload.single('file'), (req, res) => {
-  record(`Upload : "${req.file.originalname}" vers "${req.file.destination}"`);
-  res.redirect(req.baseUrl);
+exports.upload_put = (req, res, next) => {
+  //TODO (HoPollo): Maybe display each items on a list
+  res.json(`${req.files.length} Fichier(s) envoyé(s) !`);
+};
+
+exports.delete_get = (req, res) => {
+  res.sendFile(path.resolve('./lib/delete.html'));
+}
+
+exports.delete_files_get = (req, res) => {
+  DeletePageGetFiles(req, res);
+}
+
+exports.delete_delete = (req, res, next) => {
+  const fileToRemove = req.body.fileToRemove;
+  fs.unlink(path.resolve(`./public/${req.baseUrl}/${fileToRemove}`), (err, next) => {
+    if (err) console.error(err);
+    res.json(`${fileToRemove} supprimé !`);
+  });
 }

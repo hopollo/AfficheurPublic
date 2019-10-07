@@ -12,23 +12,21 @@
       color: white;
       font-weight: bold;
     }
-
-    div > * {
-      display: block;
-    }
+    div > * { display: block; }
+    h3 { color: red; }
   </style>
 </head>
 <body>
   <div>
-    <label for="upload">Fichier source :</label>
-    <input type="file" name="file" id="fileInput"/>
+    <h1>Ajout(s) de Fichier(s)</h1>
+    <input type="file" name="files" id="fileInput" accept="image/*,.pdf,.gif,video/*" multiple/>
     Identifiant : <input id='idInput' type="text">
     Mot de passe : <input id='passInput' type="password">
 
     <button id='sendButton' type="submit" disabled>Valider</button>
   </div>
+  <h3 id="fetchResult"></h3>
   <script>
-    const sendButton = document.getElementById('sendButton');
     const idInput = document.getElementById('idInput');
     const passInput = document.getElementById('passInput');
     const fileInput = document.getElementById('fileInput');
@@ -40,14 +38,31 @@
           && idInput.value.length   >= 3) sendButton.removeAttribute('disabled');
     });
 
-    sendButton.onclick = () => {
-      fetch('/upload', {
-        method: 'POST',
-        headers : {
-          'authorization': `${idInput.value}|${passInput.value}`
-        }
-      })
-      .catch(err => console.error(err));
+    document.querySelector('#sendButton').onclick = () => {
+      const formData = new FormData();
+      for (let i = 0; i < fileInput.files.length; i++) {
+        formData.append('files', fileInput.files[i]);
+      }
+
+      const result = document.getElementById('fetchResult');
+
+      try {
+        fetch('upload', {
+          method:'PUT',
+          headers : {
+            authorization: `${idInput.value}|${passInput.value}`
+          },
+          body : formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          result.innerHTML = data;
+          const exitButton = document.createElement('a');
+          exitButton.href = location.href.replace('/upload', '');
+          exitButton.appendChild(document.createTextNode('Sortie'));
+          result.appendChild(exitButton);
+        })
+      } catch (err) { console.error(err); }
     }
   </script>
 </body>
