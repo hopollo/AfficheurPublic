@@ -11,7 +11,7 @@ Each VIEW modification from distance (web url) need to get **authenticated** by 
 Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID','pass':'ChoosenUserPassword','access':'AdminChooseFolderAccess'})  
 (Every users **can get (see) any views** but only **editing it will be restricted**)  
 
-## TODOs : 
+## TODOs : ***this section is ugly to see from github but not from the IDE (you don't need this anyway until you contribute to the code itself)***
 /lib/upload.html
   [] display uploaded files as a list in res.json message
   [] hide sendButton when already logged-in
