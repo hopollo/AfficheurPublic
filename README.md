@@ -11,17 +11,17 @@ Each VIEW modification from distance (web url) need to get **authenticated** by 
 Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID','pass':'ChoosenUserPassword','access':'AdminChooseFolderAccess'})  
 (Every users **can get (see) any views** but only **editing it will be restricted**)  
 
-### Requierments / How to launch this project :
-1°) Install **NODEJS (v8.10)**, **NPM (v6.11)**, **MONGODB (v4.2)**
-2°) Download & extract this project folder on your machine
-3°) Go to the extracted folder and run ```npm install```
-4°) Run ```mongo```
-5°) Open the **afficheurdb** database with : ```use afficheurdb```
-6°) Open the **users** collection of that database : ```db.createCollection('users')```
-7°) Create a first account with ```db.users.insert({'name':'myName', 'pass':'myPass', 'access':'*'})``` , ***"*"*** means admin privileges, otherwhise use 'access':'viewA,view3,welcomePage' to grand acces to viewA **AND** view3 **AND** welcomePage folders.
-8°) Exit mongo and run on the terminal (inside the extracted folder from earlier) : ```node server``` or ```npm start```
-9°) Edit your starting script to add this server example : (node home/afficheur/server).
-10°) It's ready to go. Enjoy
+### Requierments / How to launch this project :  
+1°) Install **NODEJS (v8.10)**, **NPM (v6.11)**, **MONGODB (v4.2)**  
+2°) Download & extract this project folder on your machine  
+3°) Go to the extracted folder and run ```npm install```  
+4°) Run ```mongo```  
+5°) Open the **afficheurdb** database with : ```use afficheurdb```  
+6°) Open the **users** collection of that database : ```db.createCollection('users')```  
+7°) Create a first account with ```db.users.insert({'name':'myName', 'pass':'myPass', 'access':'*'})```   ***"*"*** means admin privileges, otherwhise use 'access':'viewA,view3,welcomePage' to grand acces to viewA **AND** view3 **AND** welcomePage folders.  
+8°) Exit mongo and run on the terminal (inside the extracted folder from earlier) : ```node server``` or ```npm start```  
+9°) Edit your starting script to add this server example : (node home/afficheur/server)  
+10°) It's ready to go. Enjoy  
 
 ## TODOs : ***this section is ugly to see from github but not from the IDE (you don't need this anyway until you contribute to the code itself)***
 /lib/upload.html
