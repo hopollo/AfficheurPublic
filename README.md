@@ -18,7 +18,7 @@ Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID
 4°) Run ```mongo```  
 5°) Open the **afficheurdb** database with : ```use afficheurdb```  
 6°) Open the **users** collection of that database : ```db.createCollection('users')```  
-7°) Create a first account with ```db.users.insert({'name':'myName', 'pass':'myPass', 'access':'*'})```   ***"*"*** means admin privileges, otherwhise use 'access':'viewA,view3,welcomePage' to grand acces to viewA **AND** view3 **AND** welcomePage folders.  
+7°) Create a first account with ```db.users.insert({'name':'myName', 'pass':'myPass', 'access':'*'})```   **"*"** means admin privileges, otherwhise use 'access':'viewA,view3,welcomePage' to grand acces to viewA **AND** view3 **AND** welcomePage folders.  
 8°) Exit mongo and run on the terminal (inside the extracted folder from earlier) : ```node server``` or ```npm start```  
 9°) Edit your starting script to add this server example : (node home/afficheur/server)  
 10°) It's ready to go. Enjoy  
