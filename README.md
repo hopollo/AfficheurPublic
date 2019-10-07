@@ -20,13 +20,13 @@ Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID
   [] block sendbutton when already logged-in
   [] display file infos (creator, date) on file mousehover
 /lib/admin.html
-  [] build page
+  [X] build page
   [] display server uptime
   [] display logs
     [] filter logs
   [] display nodejs console
     [] allow direct inputs
-  [] add users overviews
+  [X] add users overviews
     [] allow to edit users
       [] add user
       [] delete user

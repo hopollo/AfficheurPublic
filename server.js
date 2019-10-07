@@ -9,7 +9,7 @@ const record = require('./lib/utils/record/record');
 
 const indexRouter = require('./routes/indexRouter');
 const aboutRouter = require('./routes/aboutRouter');
-const loginRouter = require('./routes/loginRouter');
+const adminRouter = require('./routes/adminRouter');
 const publicRouter = require('./routes/publicRouter');
 
 const app = express();
@@ -24,7 +24,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/', indexRouter);
 app.use('/about', aboutRouter);
-app.use('/admin', loginRouter);
+app.use('/admin', adminRouter);
 app.use('/:dir', publicRouter);
 
 // Socketio seems to not work anymore with express only

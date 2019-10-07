@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Afficheur: Admin</title>
+  <style>
+    div, ul {
+      border: dotted 3px grey;
+      background: black;
+      color: white;
+      font-weight: bold;
+    }
+    div > * { display: block; }
+    h3 { color: red; }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Admin Panel :</h1>
+    Identifiant : <input id='idInput' type="text">
+    Mot de passe : <input id='passInput' type="password">
+
+    <button id='sendButton' type="submit" disabled>Valider</button>
+  </div>
+  <h3 id="fetchResult"></h3>
+  <script>
+    const idInput = document.getElementById('idInput');
+    const passInput = document.getElementById('passInput');
+    const sendButton = document.getElementById('sendButton');
+    const result = document.getElementById('fetchResult');
+    
+    passInput.addEventListener("input", () => {
+      // TODO : HoPollo Tweak feature to disable back button if pass under limit
+      if (passInput.value.length >= 4
+          && idInput.value.length >= 3) sendButton.removeAttribute('disabled');
+    });
+
+    sendButton.onclick = () => {
+      try {
+        fetch('admin/users', {
+          headers : {
+            authorization: `${idInput.value}|${passInput.value}`
+          }
+        })
+        .then(res => res.text())
+        .then(data => {
+          if (!data.includes('[')) return result.innerHTML = data;
+
+          const ul = document.createElement('ul');
+          result.appendChild(ul);
+          data = JSON.parse(data);
+          for (_ in data) {
+            const name = JSON.stringify(data[_].name);
+            const access = JSON.stringify(data[_].access);
+
+            const li = document.createElement('li');
+            li.appendChild(document.createTextNode(name));
+            li.appendChild(document.createTextNode(access));
+            const editButton = document.createElement('button');
+            editButton.appendChild(document.createTextNode('✍'))
+            const delButton = document.createElement('button');
+            delButton.appendChild(document.createTextNode('✘'));
+            li.appendChild(editButton);
+            li.appendChild(delButton);
+            ul.appendChild(li);
+          }
+        })
+      } catch (err) { console.error(err); }
+    }
+  </script>
+</body>
+</html>
