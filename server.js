@@ -1,11 +1,13 @@
 'use strict';
 
-require('dotenv').config();
 const http = require('http');
 const express = require('express');
 const watch = require('node-watch');
 
+const config = require('./config.json');
 const record = require('./lib/utils/record/record');
+const mongo = require('./lib/utils/database/dbManager');
+const dbLite = require('./lib/utils/database/dbManagerLite');
 
 const indexRouter = require('./routes/indexRouter');
 const aboutRouter = require('./routes/aboutRouter');
@@ -13,8 +15,8 @@ const adminRouter = require('./routes/adminRouter');
 const publicRouter = require('./routes/publicRouter');
 
 const app = express();
-const port = process.env.SERVER_PORT || 5000;
-
+const port = config.server.port || 5000;
+const enableMongoDB = config.server.enableMongoDB || false;
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -29,7 +31,7 @@ app.use('/:dir', publicRouter);
 
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
-const mongo = require('./lib/utils/database/dbManager').connect();
+enableMongoDB ? mongo.connect(): dbLite.connect();
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => {
