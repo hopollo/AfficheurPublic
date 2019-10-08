@@ -34,8 +34,8 @@ Each USER is made from this pattern inside **mongodb** : ({'user':'ChoosenUserID
 4°) Check the config.json file to disable MongoDB ```server: { "enableMongoDB": false }```  
 5°) Open the **/data/afficheurdb.json** and from the example account add yours     
 Account patterns should always be like : ```{"name":"myName", "pass":"myPass", "access":"*"}```  
-9°) Edit your starting script to add this server example : (node home/afficheur/server)  
-10°) It's ready to go. Enjoy
+6°) Edit your starting script to add this server example : (node home/afficheur/server)  
+7°) It's ready to go. Enjoy
 
 ## TODOs : ***this section is ugly to see from github but not from the IDE (you don't need this anyway until you contribute to the code itself)***
 /lib/upload.html
