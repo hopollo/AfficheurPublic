@@ -2,12 +2,9 @@
 
 const record = require('../lib/utils/record/record');
 const DirPageBuilder = require('../lib/utils/builder/dirPageBuilder');
-const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder');
+const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder').default;
 const DeletePageGetFiles = require('../lib/utils/builder/deletePageBuilder');
 const fs = require('fs');
-const path = require('path');
-
-
 
 exports.index = (req, res) => {
   DirPageBuilder(req, res);
@@ -23,7 +20,7 @@ exports.upload_put = (req, res, next) => {
 };
 
 exports.delete_get = (req, res) => {
-  res.sendFile(path.resolve('./lib/delete.html'));
+  res.sendFile(appRoot + '/lib/delete.html');
 }
 
 exports.delete_files_get = (req, res) => {
@@ -32,7 +29,7 @@ exports.delete_files_get = (req, res) => {
 
 exports.delete_delete = (req, res, next) => {
   const fileToRemove = req.body.fileToRemove;
-  fs.unlink(path.resolve(`./public/${req.baseUrl}/${fileToRemove}`), (err, next) => {
+  fs.unlink(`${appRoot}/public/${req.baseUrl}/${fileToRemove}`, (err, next) => {
     if (err) console.error(err);
     res.json(`${fileToRemove} supprimé !`);
   });
