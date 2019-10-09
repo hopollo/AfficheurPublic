@@ -54,7 +54,7 @@
           },
           body : formData
         })
-        .then(res => res.json())
+        .then(res => res.text())
         .then(data => {
           result.innerHTML = data;
           const exitButton = document.createElement('a');
