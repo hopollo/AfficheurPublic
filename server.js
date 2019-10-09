@@ -3,6 +3,8 @@
 const http = require('http');
 const express = require('express');
 const watch = require('node-watch');
+const path = require('path');
+global.appRoot = path.resolve(__dirname);
 
 const config = require('./config.json');
 const record = require('./lib/utils/record/record');
