@@ -18,10 +18,6 @@ const app = express();
 const port = config.server.port || 5000;
 const enableMongoDB = config.server.enableMongoDB || false;
 
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-app.set('layout', 'layouts/layout');
-
 app.use(express.static(__dirname + '/public'));
 
 app.use('/', indexRouter);
@@ -31,20 +27,23 @@ app.use('/:dir', publicRouter);
 
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
-enableMongoDB ? mongo.connect(): dbLite.connect();
+enableMongoDB ? mongo.connect() : dbLite.connect();
 const io = require('socket.io').listen(server);
 
 server.listen(port, () => {
   record(`Serveur opérationnel sur le port : ${port}`);
   record(`Serveur en écoute de modifications fichiers...`);
 
+  //wake up already connected clients
+  sendRefreshToClients();
+  
   watch(__dirname + '/public', { recursive: true }, (event, filename) => {
     record(`Modifications: (${event}) "${filename}"`);
     sendRefreshToClients();
   });
 
   function sendRefreshToClients() {
-    console.log('Refresh envoyé aux clients');
+    console.log('Refresh sent to clients');
     io.emit('ContentUpdated');
   };
 });
