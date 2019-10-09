@@ -2,7 +2,7 @@
 
 const record = require('../lib/utils/record/record');
 const DirPageBuilder = require('../lib/utils/builder/dirPageBuilder');
-const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder').default;
+const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder');
 const DeletePageGetFiles = require('../lib/utils/builder/deletePageBuilder');
 const fs = require('fs');
 
