@@ -5,13 +5,12 @@ const enableMongoDB = require('../config.json').server.enableMongoDB;
 const auth = require('../lib/utils/database/dbManager').auth;
 const authLite = require('../lib/utils/database/dbManagerLite').auth;
 const public_controller = require('../controllers/publicController');
-const path = require('path');
 const multer = require('multer');
 const noUpload = multer();
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination: (req, file, next) => next(null, path.resolve('./public' + req.baseUrl)),
+    destination: (req, file, next) => next(null, appRoot + '/public' + req.baseUrl),
     filename: (req, file, next) => next(null, file.originalname)
   })
 });
