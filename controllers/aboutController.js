@@ -11,7 +11,7 @@ exports.index = (req, res) => {
 
 exports.version_get = (req, res) => {
   fs.readFile(appRoot + '/version', 'utf8', (err, data) => {
-    if (err) record(err);
+    if (err) return record(err);
     res.send(data);
   })
 }
