@@ -16,7 +16,7 @@ exports.upload_get = (req, res) => {
 
 exports.upload_put = (req, res, next) => {
   //TODO (HoPollo): Maybe display each items on a list
-  res.json(`${req.files.length} Fichier(s) envoyé(s) !`);
+  res.json(`${req.files.length} Fichier(s) traité(s) !`);
 };
 
 exports.delete_get = (req, res) => {

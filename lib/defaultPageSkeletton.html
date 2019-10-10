@@ -18,13 +18,14 @@
 	
 	body {
     overflow: hidden;
+    cursor: none;
     width: 100vw;
     height: 100vh;
     background: white;
   }
 
 	section img {
-    height: 90vh;
+    height: 80vh;
     max-width: 100vw;
     display: block;
     margin-left: auto;
@@ -92,7 +93,11 @@ var u,f,l,d=String.fromCharCode;t.exports={version:"2.1.2",encode:a,decode:h}},f
 const socket = io.connect();
 
 socket.on('ContentUpdated', () => {
-  location.reload();
+  // Hack to avoid as much as possible same times request and break page construction
+  // This should be removed asap and works the right way but its will do for now
+  setTimeout(() => {
+    location.reload();
+  }, Math.floor((Math.random(), 10) + 1) * 1000);
 });
 
 StartSliding();

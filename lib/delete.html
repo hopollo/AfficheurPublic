@@ -48,12 +48,10 @@
         .then(data => {
           if (!data.includes('[')) return document.querySelector('#fetchResult').innerHTML = data;
           data = JSON.parse(data);
-          
+          //wipe old results to append new ones
+          result.innerHTML = '';
+
           for (_ in data) {
-            if (document.querySelector('ul')) { 
-              document.querySelector('ul').parentNode.removeChild(document.querySelector('ul'));
-              document.querySelector('a').parentNode.removeChild(document.querySelector('a'));
-            };
             const ul = document.createElement('ul');
             result.appendChild(ul);
             const li = document.createElement('li');

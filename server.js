@@ -36,9 +36,12 @@ const io = require('socket.io').listen(server);
 server.listen(port, () => {
   record(`Serveur opérationnel sur le port : ${port}`);
   record(`Serveur en écoute de modifications fichiers...`);
-
+  record(`Envoi d'un refresh aux clients imminent`);
+  
   //wake up already connected clients
-  sendRefreshToClients();
+  setTimeout(() => {
+    sendRefreshToClients();
+  }, 20 * 1000);
   
   watch(__dirname + '/public', { recursive: true }, (event, filename) => {
     record(`Modifications: (${event}) "${filename}"`);
