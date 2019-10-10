@@ -49,10 +49,13 @@
           if (!data.includes('[')) return document.querySelector('#fetchResult').innerHTML = data;
           data = JSON.parse(data);
           
-          const ul = document.createElement('ul');
-          result.appendChild(ul);
-          
           for (_ in data) {
+            if (document.querySelector('ul')) { 
+              document.querySelector('ul').parentNode.removeChild(document.querySelector('ul'));
+              document.querySelector('a').parentNode.removeChild(document.querySelector('a'));
+            };
+            const ul = document.createElement('ul');
+            result.appendChild(ul);
             const li = document.createElement('li');
             li.appendChild(document.createTextNode(data[_]))
             const delButton = document.createElement('button');
@@ -60,10 +63,13 @@
             delButton.appendChild(document.createTextNode('X'));
             li.appendChild(delButton);
             ul.appendChild(li);
+            sendButton.innerHTML = "Rafraichir";
           }
           const exitButton = document.createElement('a');
           exitButton.href = location.href.replace('/delete', '');
-          exitButton.appendChild(document.createTextNode('Sortie'));
+          actualExitButton = document.createElement('button');
+          actualExitButton.appendChild(document.createTextNode('Sortie'));
+          exitButton.appendChild(actualExitButton);
           result.appendChild(exitButton);
         })
       } catch (err) { console.error(err); }
