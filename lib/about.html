@@ -1,39 +1,49 @@
-<style>
-  ul {
-    text-align: center;
-    list-style: none;
-    border: 2px dotted grey;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Afficheur : About</title>
+  <style>
+    ul {
+      text-align: center;
+      list-style: none;
+      border: 2px dotted grey;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li><b>Afficheur Public</b></li>
+    <li id='version'></li>
+    <li>Author : <a href="https://www.twitter.com/hopollotv" target="_blank">@HoPolloTV</a></li>
+    <li>Usage : <b>npm run server</b> or <b>node server</b></li>
+    <a href="https://streamelements.com/hopollo/tip" target="_blank"><button>Donate</button></a>
+  </ul>
 
-<ul>
-  <li><b>Afficheur Public</b></li>
-  <li id='version'></li>
-  <li>Author : <a href="https://www.twitter.com/hopollotv" target="_blank">@HoPolloTV</a></li>
-  <li>Usage : <b>npm run server</b> or <b>node server</b></li>
-  <a href="https://streamelements.com/hopollo/tip" target="_blank"><button>Donate</button></a>
-</ul>
-
-<script>
-  const versionLabel = document.getElementById('version');
-
-  fetch('about/version')
-    .then(res => res.json())
-    .then(data => versionLabel.appendChild(document.createTextNode('Version : ' + data)))
-    .catch(err => console.error(err))
-
-  fetch('https://raw.githubusercontent.com/hopollo/AfficheurPublic/master/version')
-    .then(res => res.text())
-    .then(fetchedVersion => {
-      const span = document.createElement('span');
-      span.id = 'lastestVersion';
-      span.append(document.createTextNode(' | Last : '));
-      const a = document.createElement('a');
-      a.href = "https://github.com/hopollo/AfficheurPublic.git";
-      a.target = "_blank";
-      a.appendChild(document.createTextNode(fetchedVersion));
-      span.appendChild(a);
-      versionLabel.appendChild(span);
-    })
-    .catch(err => console.error(err));
-</script>
+  <script>
+      const versionLabel = document.getElementById('version');
+    
+      fetch('about/version')
+        .then(res => res.text())
+        .then(data => versionLabel.appendChild(document.createTextNode('Version : ' + data)))
+        .catch(err => console.error(err))
+    
+      fetch('https://raw.githubusercontent.com/hopollo/AfficheurPublic/master/version')
+        .then(res => res.text())
+        .then(fetchedVersion => {
+          const span = document.createElement('span');
+          span.id = 'lastestVersion';
+          span.append(document.createTextNode(' | Last : '));
+          const a = document.createElement('a');
+          a.href = "https://github.com/hopollo/AfficheurPublic.git";
+          a.target = "_blank";
+          a.appendChild(document.createTextNode(fetchedVersion));
+          span.appendChild(a);
+          versionLabel.appendChild(span);
+        })
+        .catch(err => console.error(err));
+    </script>
+</body>
+</html>
