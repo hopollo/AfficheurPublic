@@ -83,8 +83,8 @@ server: { "enableMongoDB": false }
   [] display uploaded files as a list in res.json message
   [] hide sendButton when already logged-in
 /lib/delete.html
-  [] fix duplicating files div
-  [] block sendbutton when already logged-in
+  [X] fix duplicating files div
+  [X] block sendbutton when already logged-in
   [] display file infos (creator, date) on file mousehover
 Database
   [] add passwords encryptions
@@ -94,7 +94,7 @@ Database
   [] display logs
     [] filter logs
   [] display nodejs console
-    [] allow direct inputs
+    [] allow terminals direct inputs
   [X] add users overviews
     [] allow to edit users
       [] add user
@@ -104,7 +104,7 @@ Database
         [] upsate user id
         [] update user dir permissions
 /lib/about.html
-  [] fetch github version.txt and display it on version span
+  [X] fetch github version.txt and display it on version span
     [] create a download feature to get new files
 /lib/database/dbManager.js
   [] add adduser feature
@@ -113,5 +113,5 @@ Database
   [] add deleteuser feature
 /server.js
   [] cleanup code
-    [] remove unecessary calls
+    [X] remove unecessary calls
     [] add security modules

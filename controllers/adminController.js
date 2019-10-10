@@ -1,12 +1,11 @@
 'use strict';
 
-const path = require('path');
-
 exports.index = (req, res) => {
-  res.sendFile(path.resolve('./lib/admin.html'));
+  res.sendFile(appRoot + '/lib/admin.html');
 };
 
 exports.users_get = (req, res, next) => {
+  console.log('users_get')
 }
 
 exports.user_post = (req, res, next) => {

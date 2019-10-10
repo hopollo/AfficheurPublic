@@ -22,6 +22,7 @@ const enableMongoDB = config.server.enableMongoDB || false;
 
 app.use(express.static(__dirname + '/public'));
 
+app.use(express.json());
 app.use('/', indexRouter);
 app.use('/about', aboutRouter);
 app.use('/admin', adminRouter);

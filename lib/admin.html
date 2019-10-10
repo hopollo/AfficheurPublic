@@ -59,8 +59,10 @@
             li.appendChild(document.createTextNode(name));
             li.appendChild(document.createTextNode(access));
             const editButton = document.createElement('button');
-            editButton.appendChild(document.createTextNode('✍'))
+            editButton.className = 'editButton';
+            editButton.appendChild(document.createTextNode('✍'));
             const delButton = document.createElement('button');
+            delButton.className = "delButton";
             delButton.appendChild(document.createTextNode('✘'));
             li.appendChild(editButton);
             li.appendChild(delButton);
@@ -68,6 +70,40 @@
           }
         })
       } catch (err) { console.error(err); }
+    }
+
+    document.addEventListener('click', (e) => {
+      if(e.target && !e.target.className.includes('Button')) return;
+      switch(e.target.className) {
+        case 'delButton':
+            deleteFetch(e.target);
+          break;
+        case 'editButton':
+            editFetch(e.target);
+          break;
+        default:
+      }
+    })
+
+    function deleteFetch(element) {
+      console.log(element);
+      const userToRemove = {
+        name: element.parentElement.childNodes[0].data,
+        access: element.parentElement.childNodes[1].data
+      }
+      
+      fetch('admin/user', { 
+        method: 'DELETE',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userToRemove)
+      })
+      .then(res => res.text())
+      .then(data => {
+        result.innerHTML = data;
+      })
+      .catch(err => console.error(err))
     }
   </script>
 </body>
