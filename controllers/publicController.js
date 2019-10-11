@@ -1,13 +1,18 @@
 'use strict';
 
 const record = require('../lib/utils/record/record');
+const fs = require('fs');
 const DirPageBuilder = require('../lib/utils/builder/dirPageBuilder');
 const UploadPageBuilder = require('../lib/utils/builder/uploadPageBuilder');
 const DeletePageGetFiles = require('../lib/utils/builder/deletePageBuilder');
-const fs = require('fs');
+
+exports.build = (view) => {
+  DirPageBuilder(view);
+}
 
 exports.index = (req, res) => {
-  DirPageBuilder(req, res);
+  const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
+  res.sendFile(view);
 };
 
 exports.upload_get = (req, res) => {

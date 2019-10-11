@@ -43,8 +43,10 @@ server.listen(port, () => {
     sendRefreshToClients();
   }, 20 * 1000);
   
-  watch(__dirname + '/public', { recursive: true }, (event, filename) => {
+  watch(__dirname + '/public', { recursive: true }, async (event, filename) => {
     record(`Modifications: (${event}) "${filename}"`);
+    const pageToBuild = filename.split('/public/')[1].split('/')[0];
+    require('./controllers/publicController').build(pageToBuild);
     sendRefreshToClients();
   });
 
