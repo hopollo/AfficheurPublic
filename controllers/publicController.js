@@ -12,7 +12,10 @@ exports.build = (view) => {
 
 exports.index = (req, res) => {
   const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
-  res.sendFile(view);
+  res.sendFile(view, (err) => {
+    const vueNotCreatedYet = req.baseUrl.substr(1);
+    if (err) return DirPageBuilder(vueNotCreatedYet);
+  });
 };
 
 exports.upload_get = (req, res) => {
