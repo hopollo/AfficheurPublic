@@ -13,7 +13,7 @@ exports.build = (view) => {
 exports.index = (req, res) => {
   const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
   res.sendFile(view, (err) => {
-    const vueNotCreatedYet = req.baseUrl.substr(1);
+    const vueNotCreatedYet = {'view' : req.baseUrl.substr(1), 'res' :res};
     if (err) return DirPageBuilder(vueNotCreatedYet);
   });
 };

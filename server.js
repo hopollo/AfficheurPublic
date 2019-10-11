@@ -28,6 +28,11 @@ app.use('/about', aboutRouter);
 app.use('/admin', adminRouter);
 app.use('/:dir', publicRouter);
 
+// 404 Route
+app.get('*', (req, res) => {
+  res.status(404).send("Désolé, cette page n'existe pas ! <a href='/'><button>Sortie</button></a>");
+});
+
 // Socketio seems to not work anymore with express only
 const server = http.createServer(app);
 enableMongoDB ? mongo.connect() : dbLite.connect();

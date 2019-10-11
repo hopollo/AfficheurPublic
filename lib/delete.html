@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +29,7 @@
     const idInput = document.getElementById('idInput');
     const passInput = document.getElementById('passInput');
     const sendButton = document.getElementById('sendButton');
+    sendButton.focus();
     const result = document.getElementById('fetchResult');
     
     passInput.addEventListener("input", () => {
@@ -46,7 +47,8 @@
         })
         .then(res => res.text())
         .then(data => {
-          if (!data.includes('[')) return document.querySelector('#fetchResult').innerHTML = data;
+          // means its
+          if (!data.includes('[')) return result.innerHTML = data;
           data = JSON.parse(data);
           //wipe old results to append new ones
           result.innerHTML = '';
@@ -70,11 +72,11 @@
           exitButton.appendChild(actualExitButton);
           result.appendChild(exitButton);
         })
-      } catch (err) { console.error(err); }
+      } catch (err) { console.error(err); result.innerHTML = err }
     }
 
     document.addEventListener('click',function(e){
-      if(e.target && e.target.className != 'delButton') return;
+      if (e.target && e.target.className != 'delButton') return;
       const itemToDelete = e.target.parentElement.firstChild.data;
       const formData = new FormData();
       formData.append('fileToRemove', itemToDelete);
