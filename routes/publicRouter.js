@@ -10,7 +10,7 @@ const noUpload = multer();
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination: (req, file, next) => next(null, appRoot + '/public' + req.baseUrl),
+    destination: (req, file, next) => next(null, appRoot + '/public/' + req.baseUrl.substr(1)),
     filename: (req, file, next) => next(null, file.originalname)
   })
 });

@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const watch = require('node-watch');
 const path = require('path');
+const publicController = require('./controllers/publicController');
 global.appRoot = path.resolve(__dirname);
 
 const config = require('./config.json');
@@ -50,8 +51,9 @@ server.listen(port, () => {
   
   watch(__dirname + '/public', { recursive: true }, async (event, filename) => {
     record(`Modifications: (${event}) "${filename}"`);
-    const pageToBuild = filename.split('/public/')[1].split('/')[0];
-    require('./controllers/publicController').build(pageToBuild);
+    const page= filename.split('/public/')[1].split('/')[0];
+    if (event === 'remove') return publicController.remove(page);
+    publicController.build(page);
     sendRefreshToClients();
   });
 

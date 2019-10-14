@@ -10,11 +10,17 @@ exports.build = (view) => {
   DirPageBuilder(view);
 }
 
+exports.remove = (view) => {
+  fs.unlink(appRoot + `/views/${view}.html`, (err) => {
+    if (err) return record(`ERROR : ${err}`);
+    return record(`View : ${view}.html => REMOVED`);
+  });
+}
+
 exports.index = (req, res) => {
   const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
   res.sendFile(view, (err) => {
-    const vueNotCreatedYet = {'view' : req.baseUrl.substr(1), 'res' :res};
-    if (err) return DirPageBuilder(vueNotCreatedYet);
+    if (err) return res.status(404).send("Désolé, cette page n'existe pas ! <a href='/'><button>Sortie</button></a>");
   });
 };
 
