@@ -1,7 +1,1 @@
-[
-  {
-     "name":"root",
-     "pass":"1234",
-     "access":"*"
-  }
-]
+[{"name":"root","pass":"1234","access":"*"},{"name":"dqsdsqd","pass":"qdqdsq","access":"dsqdqsdq"},{"name":"jfp","pass":"moi0","access":"EmptyFolder"},{"name":"jfp976","pass":"jfp976","access":"EmptyFolder,EmptyDemoFolder"}]

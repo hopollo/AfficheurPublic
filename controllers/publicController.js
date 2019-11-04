@@ -19,9 +19,11 @@ exports.remove = (view) => {
 
 exports.index = (req, res) => {
   const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
+  /* ISSUE : Conflic with existing page, routes
   res.sendFile(view, (err) => {
     if (err) return res.status(404).send("Désolé, cette page n'existe pas ! <a href='/'><button>Sortie</button></a>");
   });
+  */
 };
 
 exports.upload_get = (req, res) => {

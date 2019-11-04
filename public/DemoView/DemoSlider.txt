@@ -1,0 +1,4 @@
+Welcome to this project & thanks for downloading it ! :) 
+<i style="color:orange;">this supports html tags, vanilla css & js</i>
+Supported extensions : pdf, gif, mp4, ogg, webm
+-HoPollo

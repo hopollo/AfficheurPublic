@@ -14,6 +14,44 @@
     }
     div > * { display: block; }
     h3 { color: red; }
+    ul div {
+      display: flex;
+    }
+    ul input {
+      width: 80px;
+    }
+    
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tab button.active {
+      background-color: #ccc;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
   </style>
 </head>
 <body>
@@ -38,38 +76,163 @@
     });
 
     sendButton.onclick = () => {
-      try {
-        fetch('admin/users', {
-          headers : {
-            authorization: `${idInput.value}|${passInput.value}`
-          }
-        })
-        .then(res => res.text())
-        .then(data => {
-          if (!data.includes('[')) return result.innerHTML = data;
+      fetch('admin/users', {
+        headers : {
+          authorization: `${idInput.value}|${passInput.value}`
+        }
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (!data.includes('[')) return result.innerHTML = data;
 
-          const ul = document.createElement('ul');
-          result.appendChild(ul);
-          data = JSON.parse(data);
-          for (_ in data) {
-            const name = JSON.stringify(data[_].name);
-            const access = JSON.stringify(data[_].access);
+        CreateTabs();
+      })
+      .catch(err => console.error(err))
+    };
 
-            const li = document.createElement('li');
-            li.appendChild(document.createTextNode(name));
-            li.appendChild(document.createTextNode(access));
-            const editButton = document.createElement('button');
-            editButton.className = 'editButton';
-            editButton.appendChild(document.createTextNode('✍'));
-            const delButton = document.createElement('button');
-            delButton.className = "delButton";
-            delButton.appendChild(document.createTextNode('✘'));
-            li.appendChild(editButton);
-            li.appendChild(delButton);
-            ul.appendChild(li);
-          }
-        })
-      } catch (err) { console.error(err); }
+    function CreateTabs() {
+      const tabContainer = document.createElement('div')
+            tabContainer.className="tab";
+        const usersTabButton = document.createElement('button')
+              usersTabButton.setAttribute('onclick', "openTab(event, 'Users')");
+              usersTabButton.appendChild(document.createTextNode('Users'));
+        const viewsTabButton = document.createElement('button');
+              viewsTabButton.setAttribute('onclick', "openTab(event, 'Views')");
+              viewsTabButton.appendChild(document.createTextNode('Views'));
+        const logsTabButton = document.createElement('button');
+              logsTabButton.setAttribute('onclick', "openTab(event, 'Logs')");
+              logsTabButton.appendChild(document.createTextNode('Logs'));
+        const terminalTabButton = document.createElement('button');
+              terminalTabButton.setAttribute('onclick', "openTab(event, 'Ternimal')");
+              terminalTabButton.appendChild(document.createTextNode('Terminal'));
+      tabContainer.appendChild(usersTabButton);
+      tabContainer.appendChild(viewsTabButton);
+      tabContainer.appendChild(logsTabButton);
+      tabContainer.appendChild(terminalTabButton);
+
+      const usersTabContent = document.createElement('div');
+            usersTabContent.id = 'Users';
+            usersTabContent.className = 'tabContent';
+        const usersTabContentResults = document.createElement('div');
+              usersTabContentResults.className = 'tabLinks';
+      tabContainer.appendChild(usersTabContent);
+      tabContainer.appendChild(usersTabContentResults);
+
+      const viewsTabContent = document.createElement('div');
+            viewsTabContent.id = 'Views';
+            viewsTabContent.className = 'tabContent';
+        const viewsTabContentResults = document.createElement('div');
+              viewsTabContentResults.className = 'tabLinks';
+      tabContainer.appendChild(viewsTabContent);
+      tabContainer.appendChild(viewsTabContentResults);
+
+      const logsTabContent = document.createElement('div');
+            logsTabContent.id = 'Logs';
+            logsTabContent.className = 'tabContent';
+        const logsTabContentResults = document.createElement('div');
+              logsTabContentResults.className = 'tabLinks';
+      tabContainer.appendChild(logsTabContent);
+      tabContainer.appendChild(logsTabContentResults);
+
+      const terminalTabContent = document.createElement('div');
+            terminalTabContent.id = 'Terminal';
+            terminalTabContent.className = 'tabContent';
+        const terminalTabContentResults = document.createElement('div');
+              terminalTabContentResults.className = 'tabLinks';
+      tabContainer.appendChild(terminalTabContent);
+      tabContainer.appendChild(terminalTabContentResults);
+
+      result.appendChild(tabContainer);
+    }
+
+    function openTab(evt, tabName) {
+      let i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+      
+      switch(tabName) {
+        case 'Users'   : GetUsers();    break;
+        case 'Views'   : GetViews();    break;
+        case 'Logs'    : GetLogs();     break;
+        case 'Terminal': GetTerminal(); break;
+        default: return;
+      }
+    }
+
+    function GetUsers() {
+      const ul = document.createElement('ul');
+      result.appendChild(ul);
+
+      const createUserDiv               = document.createElement('div');
+      const createUserLabel             = document.createElement('label')
+      createUserLabel.appendChild(document.createTextNode('+User :'));
+      
+      const createUserNameDiv           = document.createElement('div');
+      const createUserNameInput         = document.createElement('input');
+      createUserNameInput.id            = 'createUserNameInput';
+      createUserNameInput.type          = 'text';
+      createUserNameInput.placeholder   = 'Username';
+      createUserNameDiv.appendChild(createUserNameInput);
+
+      const createUserPassDiv           = document.createElement('div');
+      const createUserPassInput         = document.createElement('input');
+      createUserPassInput.id            = 'createUserPassInput';
+      createUserPassInput.type          = 'password';
+      createUserPassInput.placeholder   = 'Password';
+      createUserPassDiv.appendChild(createUserPassInput);
+
+      const createUserAccessDiv         = document.createElement('div');
+      const createUserAccessInput       = document.createElement('input');
+      createUserAccessInput.id          = 'createUserAccessInput';
+      createUserAccessInput.type        = 'text';
+      createUserAccessInput.placeholder = 'Access';
+      createUserAccessDiv.appendChild(createUserAccessInput);
+
+      const createUserButton            = document.createElement('button');
+      createUserButton.className        = 'createUserButton';
+      createUserButton.disabled = true;
+      createUserButton.appendChild(document.createTextNode('Create'));
+
+      createUserDiv.appendChild(createUserLabel);
+      createUserDiv.appendChild(createUserNameDiv);
+      createUserDiv.appendChild(createUserPassDiv);
+      createUserDiv.appendChild(createUserAccessDiv);
+      createUserDiv.appendChild(createUserButton);
+      
+      ul.appendChild(createUserDiv);
+
+      data = JSON.parse(data);
+      
+      for (_ in data) {
+        const name = JSON.stringify(data[_].name);
+        const access = JSON.stringify(data[_].access);
+
+        const li = document.createElement('li');
+
+        li.appendChild(document.createTextNode(`Name: ${name}, Access: ${access}`));
+
+        const editButton     = document.createElement('button');
+        const delButton      = document.createElement('button');
+
+        editButton.appendChild(document.createTextNode('✍'));
+        delButton.appendChild(document.createTextNode('✘'));
+
+        editButton.className = 'editButton';
+        delButton.className  = 'delButton';
+
+        li.appendChild(editButton);
+        li.appendChild(delButton);
+        
+        ul.appendChild(li);
+      }
     }
 
     document.addEventListener('click', (e) => {
@@ -81,12 +244,33 @@
         case 'editButton':
             editFetch(e.target);
           break;
+        case 'createUserButton':
+            createFetch();
         default:
       }
     })
 
+    function createFetch() {
+      const userToCreate = {
+        name: createUserNameInput.value,
+        pass: createUserPassInput.value,
+        access: createUserAccessInput.value
+      }
+
+      fetch('admin/user', {
+        method: 'POST',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userToCreate)
+      })
+      .then(res => res.text())
+      .then(data => result.innerHTML = data)
+      .catch(err => console.error(err));
+    }
+
     function deleteFetch(element) {
-      console.log(element);
+      console.log(element.parentElement);
       const userToRemove = {
         name: element.parentElement.childNodes[0].data,
         access: element.parentElement.childNodes[1].data
@@ -104,6 +288,76 @@
         result.innerHTML = data;
       })
       .catch(err => console.error(err))
+    }
+
+    function GetViews() {
+      fetch('admin/views')
+        .then(res => res.json())
+        .then(views => {
+          const viewsTabContainer = document.createElement('table');
+          const tabRows = document.createElement('tr');
+          const nameTitle = document.createElement('th');
+          nameTitle.appendChild(document.createTextNode('Name'));
+          const sizeTitle = document.createElement('th');
+          sizeTitle.appendChild(document.createTextNode('Size'));
+          const dateTitle = document.createElement('th');
+          dateTitle.appendChild(document.createTextNode('Date'));
+          const actionsTitle = document.createElement('th');
+          actionsTitle.appendChild(document.createTextNode('Actions'));
+
+          tabRows.appendChild(nameTitle);
+          tabRows.appendChild(dateTitle);
+          tabRows.appendChild(sizeTitle);
+          tabRows.appendChild(actionsTitle);
+
+          viewsTabContainer.appendChild(tabRows);
+
+          for (const view of views) {
+            const viewElement = document.createElement('tr');
+            
+            const viewTitle = document.createElement('td');
+            viewTitle.appendChild(document.createTextNode(view.title));
+            const viewSize = document.createElement('td');
+            viewSize.appendChild(document.createTextNode(view.size));
+            const viewDate = document.createElement('td');
+            viewDate.appendChild(document.createTextNode(view.date));
+            const viewActions = document.createElement('td');
+            
+            /*
+            const redirectButton = document.createElement('button');
+            redirectButton.appenChild(document.createTextNode('Visit'));
+          
+            const rebuildButton = document.createElement('button');
+            reduildButton.appendChild(document.createTextNode('Rebuild'));
+            const deleteButton = document.createElement('button');
+            deleteButton.appendChild(document.createTextNode('Delete'));
+            
+            viewActions.appendChild(redirectButton);
+            viewActions.appendChild(rebuildButton);
+            viewActions.appendChild(deleteButton);
+            */
+            
+            viewElement.appendChild(viewTitle);
+            viewElement.appendChild(viewDate);
+            viewElement.appendChild(viewSize); 
+            viewElement.appendChild(viewActions);
+            
+            viewsTabContainer.appendChild(viewElement);
+            document.getElementById('Views').appendChild(viewsTabContainer);
+          }
+        })
+        .catch(err => console.error(err)); 
+    }
+
+    function GetLogs() {
+      fetch('admin/logs')
+        .then(res => res.text())
+        .then(data => result.innerHTML = data)
+        .catch(err => console.error(err));
+    }
+
+    function GetTerminal() {
+      return console.log('Not Implemented yet');
     }
   </script>
 </body>

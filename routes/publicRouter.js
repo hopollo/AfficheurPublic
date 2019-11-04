@@ -20,6 +20,7 @@ module.exports = router;
 router.get('/', public_controller.index);
 
 router.get('/upload', public_controller.upload_get);
+
 if (enableMongoDB) router.put('/upload', auth, upload.array('files'), public_controller.upload_put);
 router.put('/upload', authLite, upload.array('files'), public_controller.upload_put);
 
