@@ -76,7 +76,7 @@
     });
 
     sendButton.onclick = () => {
-      fetch('admin/users', {
+      fetch('admin/menu', {
         headers : {
           authorization: `${idInput.value}|${passInput.value}`
         }
@@ -84,66 +84,9 @@
       .then(res => res.text())
       .then(data => {
         if (!data.includes('[')) return result.innerHTML = data;
-
-        CreateTabs();
       })
       .catch(err => console.error(err))
     };
-
-    function CreateTabs() {
-      const tabContainer = document.createElement('div')
-            tabContainer.className="tab";
-        const usersTabButton = document.createElement('button')
-              usersTabButton.setAttribute('onclick', "openTab(event, 'Users')");
-              usersTabButton.appendChild(document.createTextNode('Users'));
-        const viewsTabButton = document.createElement('button');
-              viewsTabButton.setAttribute('onclick', "openTab(event, 'Views')");
-              viewsTabButton.appendChild(document.createTextNode('Views'));
-        const logsTabButton = document.createElement('button');
-              logsTabButton.setAttribute('onclick', "openTab(event, 'Logs')");
-              logsTabButton.appendChild(document.createTextNode('Logs'));
-        const terminalTabButton = document.createElement('button');
-              terminalTabButton.setAttribute('onclick', "openTab(event, 'Ternimal')");
-              terminalTabButton.appendChild(document.createTextNode('Terminal'));
-      tabContainer.appendChild(usersTabButton);
-      tabContainer.appendChild(viewsTabButton);
-      tabContainer.appendChild(logsTabButton);
-      tabContainer.appendChild(terminalTabButton);
-
-      const usersTabContent = document.createElement('div');
-            usersTabContent.id = 'Users';
-            usersTabContent.className = 'tabContent';
-        const usersTabContentResults = document.createElement('div');
-              usersTabContentResults.className = 'tabLinks';
-      tabContainer.appendChild(usersTabContent);
-      tabContainer.appendChild(usersTabContentResults);
-
-      const viewsTabContent = document.createElement('div');
-            viewsTabContent.id = 'Views';
-            viewsTabContent.className = 'tabContent';
-        const viewsTabContentResults = document.createElement('div');
-              viewsTabContentResults.className = 'tabLinks';
-      tabContainer.appendChild(viewsTabContent);
-      tabContainer.appendChild(viewsTabContentResults);
-
-      const logsTabContent = document.createElement('div');
-            logsTabContent.id = 'Logs';
-            logsTabContent.className = 'tabContent';
-        const logsTabContentResults = document.createElement('div');
-              logsTabContentResults.className = 'tabLinks';
-      tabContainer.appendChild(logsTabContent);
-      tabContainer.appendChild(logsTabContentResults);
-
-      const terminalTabContent = document.createElement('div');
-            terminalTabContent.id = 'Terminal';
-            terminalTabContent.className = 'tabContent';
-        const terminalTabContentResults = document.createElement('div');
-              terminalTabContentResults.className = 'tabLinks';
-      tabContainer.appendChild(terminalTabContent);
-      tabContainer.appendChild(terminalTabContentResults);
-
-      result.appendChild(tabContainer);
-    }
 
     function openTab(evt, tabName) {
       let i, tabcontent, tablinks;
@@ -168,87 +111,42 @@
     }
 
     function GetUsers() {
-      const ul = document.createElement('ul');
-      result.appendChild(ul);
+      fetch('admin/users')
+        .then(res => res.json())
+        .then(users => {
+          const usersTabContainer = document.createElement('table');
+          const tabRows = document.createElement('tr');
+          const nameTitle = document.createElement('th');
+          nameTitle.appendChild(document.createTextNode('Id'));
+          const accessTitle = document.createElement('th');
+          accessTitle.appendChild(document.createTextNode('Access'));
+          const actionsTitle = document.createElement('th');
+          actionsTitle.appendChild(document.createTextNode('Actions'));
 
-      const createUserDiv               = document.createElement('div');
-      const createUserLabel             = document.createElement('label')
-      createUserLabel.appendChild(document.createTextNode('+User :'));
-      
-      const createUserNameDiv           = document.createElement('div');
-      const createUserNameInput         = document.createElement('input');
-      createUserNameInput.id            = 'createUserNameInput';
-      createUserNameInput.type          = 'text';
-      createUserNameInput.placeholder   = 'Username';
-      createUserNameDiv.appendChild(createUserNameInput);
+          tabRows.appendChild(nameTitle);
+          tabRows.appendChild(accessTitle);
+          tabRows.appendChild(actionsTitle);
 
-      const createUserPassDiv           = document.createElement('div');
-      const createUserPassInput         = document.createElement('input');
-      createUserPassInput.id            = 'createUserPassInput';
-      createUserPassInput.type          = 'password';
-      createUserPassInput.placeholder   = 'Password';
-      createUserPassDiv.appendChild(createUserPassInput);
-
-      const createUserAccessDiv         = document.createElement('div');
-      const createUserAccessInput       = document.createElement('input');
-      createUserAccessInput.id          = 'createUserAccessInput';
-      createUserAccessInput.type        = 'text';
-      createUserAccessInput.placeholder = 'Access';
-      createUserAccessDiv.appendChild(createUserAccessInput);
-
-      const createUserButton            = document.createElement('button');
-      createUserButton.className        = 'createUserButton';
-      createUserButton.disabled = true;
-      createUserButton.appendChild(document.createTextNode('Create'));
-
-      createUserDiv.appendChild(createUserLabel);
-      createUserDiv.appendChild(createUserNameDiv);
-      createUserDiv.appendChild(createUserPassDiv);
-      createUserDiv.appendChild(createUserAccessDiv);
-      createUserDiv.appendChild(createUserButton);
-      
-      ul.appendChild(createUserDiv);
-
-      data = JSON.parse(data);
-      
-      for (_ in data) {
-        const name = JSON.stringify(data[_].name);
-        const access = JSON.stringify(data[_].access);
-
-        const li = document.createElement('li');
-
-        li.appendChild(document.createTextNode(`Name: ${name}, Access: ${access}`));
-
-        const editButton     = document.createElement('button');
-        const delButton      = document.createElement('button');
-
-        editButton.appendChild(document.createTextNode('✍'));
-        delButton.appendChild(document.createTextNode('✘'));
-
-        editButton.className = 'editButton';
-        delButton.className  = 'delButton';
-
-        li.appendChild(editButton);
-        li.appendChild(delButton);
-        
-        ul.appendChild(li);
-      }
+          usersTabContainer.appendChild(tabRows);
+          
+          for (const user of users) {
+            const userElement = document.createElement('tr');
+            
+            const userId = document.createElement('td');
+            userId.appendChild(document.createTextNode(user.name));
+            const userAccess = document.createElement('td');
+            userAccess.appendChild(document.createTextNode(user.access));
+            const userActions = document.createElement('td');
+            
+            userElement.appendChild(userId);
+            userElement.appendChild(userAccess);
+            
+            usersTabContainer.appendChild(userElement);
+            document.getElementById('Users').appendChild(usersTabContainer);
+          }
+        })
+        .catch(err => console.error(err))
     }
-
-    document.addEventListener('click', (e) => {
-      if(e.target && !e.target.className.includes('Button')) return;
-      switch(e.target.className) {
-        case 'delButton':
-            deleteFetch(e.target);
-          break;
-        case 'editButton':
-            editFetch(e.target);
-          break;
-        case 'createUserButton':
-            createFetch();
-        default:
-      }
-    })
 
     function createFetch() {
       const userToCreate = {
@@ -323,20 +221,6 @@
             viewDate.appendChild(document.createTextNode(view.date));
             const viewActions = document.createElement('td');
             
-            /*
-            const redirectButton = document.createElement('button');
-            redirectButton.appenChild(document.createTextNode('Visit'));
-          
-            const rebuildButton = document.createElement('button');
-            reduildButton.appendChild(document.createTextNode('Rebuild'));
-            const deleteButton = document.createElement('button');
-            deleteButton.appendChild(document.createTextNode('Delete'));
-            
-            viewActions.appendChild(redirectButton);
-            viewActions.appendChild(rebuildButton);
-            viewActions.appendChild(deleteButton);
-            */
-            
             viewElement.appendChild(viewTitle);
             viewElement.appendChild(viewDate);
             viewElement.appendChild(viewSize); 
@@ -351,14 +235,70 @@
 
     function GetLogs() {
       fetch('admin/logs')
-        .then(res => res.text())
-        .then(data => result.innerHTML = data)
+        .then(res => res.json())
+        .then(logs => {
+          const logsTabContainer = document.createElement('table');
+          const tabRows = document.createElement('tr');
+          const logTitle = document.createElement('th');
+          logTitle.appendChild(document.createTextNode('Name'));
+          const sizeTitle = document.createElement('th');
+          sizeTitle.appendChild(document.createTextNode('Size'));
+          const dateTitle = document.createElement('th');
+          dateTitle.appendChild(document.createTextNode('Date'));
+          const actionsTitle = document.createElement('th');
+          actionsTitle.appendChild(document.createTextNode('Actions'));
+
+          tabRows.appendChild(logTitle);
+          tabRows.appendChild(dateTitle);
+          tabRows.appendChild(sizeTitle);
+          tabRows.appendChild(actionsTitle);
+
+          logsTabContainer.appendChild(tabRows);
+
+          for (const log of logs) {
+            const logElement = document.createElement('tr');
+            
+            const logTitle = document.createElement('td');
+            logTitle.appendChild(document.createTextNode(log.title));
+            const logSize = document.createElement('td');
+            logSize.appendChild(document.createTextNode(log.size));
+            const logDate = document.createElement('td');
+            logDate.appendChild(document.createTextNode(log.date));
+            const logActions = document.createElement('td');
+            
+            logElement.appendChild(logTitle);
+            logElement.appendChild(logDate);
+            logElement.appendChild(logSize); 
+            logElement.appendChild(logActions);
+            
+            logsTabContainer.appendChild(logElement);
+            document.getElementById('Views').appendChild(logsTabContainer);
+          }
+        })
         .catch(err => console.error(err));
     }
 
     function GetTerminal() {
-      return console.log('Not Implemented yet');
+      fetch('admin/terminal')
+        .then(res => res.json())
+        .then(terminal => document.getElementById('Terminal').innerHTML = terminal)
+        .catch(err => console.error(err))
     }
+
+    document.addEventListener('click', (e) => {
+      if(e.target && !e.target.className.includes('Button')) return;
+      switch(e.target.className) {
+        case 'delButton':
+            deleteFetch(e.target);
+          break;
+        case 'editButton':
+            editFetch(e.target);
+          break;
+        case 'createUserButton':
+            createFetch();
+        default:
+      }
+    });
   </script>
 </body>
 </html>
