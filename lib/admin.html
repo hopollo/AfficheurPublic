@@ -14,44 +14,44 @@
     }
     div > * { display: block; }
     h3 { color: red; }
-    ul div {
-      display: flex;
-    }
-    ul input {
-      width: 80px;
+    
+    #createUserDiv {
+      display:  flex; 
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
     }
     
-    .tab {
-      overflow: hidden;
-      border: 1px solid #ccc;
-      background-color: #f1f1f1;
-    }
-
-    .tab button {
-      background-color: inherit;
+    /* Style tab links */
+    .tabLink {
+      background-color: #555;
+      color: white;
       float: left;
       border: none;
       outline: none;
       cursor: pointer;
       padding: 14px 16px;
-      transition: 0.3s;
       font-size: 17px;
+      width: 25%;
     }
 
-    .tab button:hover {
-      background-color: #ddd;
+    .tabLink:hover {
+      background-color: #777;
     }
 
-    .tab button.active {
-      background-color: #ccc;
-    }
-
-    .tabcontent {
+    /* Style the tab content (and add height:100% for full page content) */
+    .tabContent {
+      color: white;
       display: none;
-      padding: 6px 12px;
-      border: 1px solid #ccc;
-      border-top: none;
+      padding: 100px 20px;
+      height: 100%;
     }
+
+    #Users {background-color: red;}
+    #Views {background-color: green;}
+    #Logs {background-color: blue;}
+    #Terminal {background-color: orange;}
   </style>
 </head>
 <body>
@@ -60,7 +60,7 @@
     Identifiant : <input id='idInput' type="text">
     Mot de passe : <input id='passInput' type="password">
 
-    <button id='sendButton' type="submit" disabled>Valider</button>
+    <button id='sendButton' type="submit" disabled="">Valider</button>
   </div>
   <h3 id="fetchResult"></h3>
   <script>
@@ -71,8 +71,8 @@
     
     passInput.addEventListener("input", () => {
       // TODO : HoPollo Tweak feature to disable back button if pass under limit
-      if (passInput.value.length >= 4
-          && idInput.value.length >= 3) sendButton.removeAttribute('disabled');
+      if (passInput.value.length >= 4 &&
+          idInput.value.length >= 3) sendButton.removeAttribute('disabled');
     });
 
     sendButton.onclick = () => {
@@ -84,24 +84,27 @@
       .then(res => res.text())
       .then(data => {
         if (!data.includes('[')) return result.innerHTML = data;
+        
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
       })
       .catch(err => console.error(err))
     };
 
-    function openTab(evt, tabName) {
-      let i, tabcontent, tablinks;
-      tabcontent = document.getElementsByClassName("tabcontent");
+    function openPage(pageName,elmnt,color) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabContent");
       for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
       }
-      tablinks = document.getElementsByClassName("tablinks");
+      tablinks = document.getElementsByClassName("tabLink");
       for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+        tablinks[i].style.backgroundColor = "";
       }
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.className += " active";
-      
-      switch(tabName) {
+      document.getElementById(pageName).style.display = "block";
+      elmnt.style.backgroundColor = color;
+
+      switch(pageName) {
         case 'Users'   : GetUsers();    break;
         case 'Views'   : GetViews();    break;
         case 'Logs'    : GetLogs();     break;
@@ -114,7 +117,56 @@
       fetch('admin/users')
         .then(res => res.json())
         .then(users => {
+          if (!document.getElementById('createUserDiv')) {
+            const createUserDiv               = document.createElement('div');
+            createUserDiv.id = 'createUserDiv';
+            const createUserLabel             = document.createElement('label')
+            createUserLabel.appendChild(document.createTextNode('+User :'));
+            
+            const createUserNameDiv           = document.createElement('div');
+            const createUserNameInput         = document.createElement('input');
+            createUserNameInput.id            = 'createUserNameInput';
+            createUserNameInput.type          = 'text';
+            createUserNameInput.placeholder   = 'Username';
+            createUserNameDiv.appendChild(createUserNameInput);
+            const createUserPassDiv           = document.createElement('div');
+            const createUserPassInput         = document.createElement('input');
+            createUserPassInput.id            = 'createUserPassInput';
+            createUserPassInput.type          = 'password';
+            createUserPassInput.placeholder   = 'Password';
+            createUserPassDiv.appendChild(createUserPassInput);
+            const createUserAccessDiv         = document.createElement('div');
+            const createUserAccessInput       = document.createElement('input');
+            createUserAccessInput.id          = 'createUserAccessInput';
+            createUserAccessInput.type        = 'text';
+            createUserAccessInput.placeholder = 'Access';
+            createUserAccessDiv.appendChild(createUserAccessInput);
+            const createUserButton            = document.createElement('button');
+            createUserButton.className        = 'createUserButton';
+            createUserButton.disabled = true;
+            createUserButton.appendChild(document.createTextNode('Create'));
+            createUserDiv.appendChild(createUserLabel);
+            createUserDiv.appendChild(createUserNameDiv);
+            createUserDiv.appendChild(createUserPassDiv);
+            createUserDiv.appendChild(createUserAccessDiv);
+            createUserDiv.appendChild(createUserButton);
+            
+            document.getElementById('Users').appendChild(createUserDiv);
+
+            createUserDiv.addEventListener("input", () => {
+              // TODO : HoPollo Tweak feature to disable back button if pass under limit
+              console.log('Typing');
+              if (createUserPassInput.value.length   >= 4 &&
+                  createUserNameInput.value.length   >= 3 &&
+                  createUserAccessInput.value.length >= 1) createUserButton.removeAttribute('disabled');
+            });
+          }
+
+          if (document.getElementById('UsersResults'))
+            document.getElementById('Users').removeChild(document.getElementById('UsersResults'));
+
           const usersTabContainer = document.createElement('table');
+          usersTabContainer.id = 'UsersResults';
           const tabRows = document.createElement('tr');
           const nameTitle = document.createElement('th');
           nameTitle.appendChild(document.createTextNode('Id'));
@@ -192,7 +244,11 @@
       fetch('admin/views')
         .then(res => res.json())
         .then(views => {
+          if (document.getElementById('ViewsResults'))
+            document.getElementById('Views').removeChild(document.getElementById('ViewsResults'));
+
           const viewsTabContainer = document.createElement('table');
+          viewsTabContainer.id = 'ViewsResults';
           const tabRows = document.createElement('tr');
           const nameTitle = document.createElement('th');
           nameTitle.appendChild(document.createTextNode('Name'));
@@ -237,14 +293,18 @@
       fetch('admin/logs')
         .then(res => res.json())
         .then(logs => {
+          if (document.getElementById('LogsResults'))
+            document.getElementById('Logs').removeChild(document.getElementById('LogsResults'));
+
           const logsTabContainer = document.createElement('table');
+          logsTabContainer.id = 'LogsResults';
           const tabRows = document.createElement('tr');
           const logTitle = document.createElement('th');
           logTitle.appendChild(document.createTextNode('Name'));
           const sizeTitle = document.createElement('th');
           sizeTitle.appendChild(document.createTextNode('Size'));
           const dateTitle = document.createElement('th');
-          dateTitle.appendChild(document.createTextNode('Date'));
+          dateTitle.appendChild(document.createTextNode('Time'));
           const actionsTitle = document.createElement('th');
           actionsTitle.appendChild(document.createTextNode('Actions'));
 
@@ -272,7 +332,7 @@
             logElement.appendChild(logActions);
             
             logsTabContainer.appendChild(logElement);
-            document.getElementById('Views').appendChild(logsTabContainer);
+            document.getElementById('Logs').appendChild(logsTabContainer);
           }
         })
         .catch(err => console.error(err));
@@ -281,7 +341,12 @@
     function GetTerminal() {
       fetch('admin/terminal')
         .then(res => res.json())
-        .then(terminal => document.getElementById('Terminal').innerHTML = terminal)
+        .then(terminal => {
+          if (document.getElementById('TerminalResults'))
+            document.getElementById('Terminal').removeChild(document.getElementById('TerminalResults'));
+          
+          document.getElementById('Terminal').innerHTML = terminal;
+        })
         .catch(err => console.error(err))
     }
 

@@ -10,10 +10,10 @@ exports.index = (req, res) => {
 exports.menu_get = (req, res, next) => {
   const menu = 
   `<div class="tab">
-    <button onclick="openTab(event, 'Users')">Users</button>
-    <button onclick="openTab(event, 'Views')">Views</button>
-    <button onclick="openTab(event, 'Logs')">Logs</button>
-    <button onclick="openTab(event, 'Terminal')">Terminal</button>
+    <button id="defaultOpen" class="tabLink" onclick="openPage('Users', this, 'red')">Users</button>
+    <button class="tabLink" onclick="openPage('Views', this, 'green')">Views</button>
+    <button class="tabLink" onclick="openPage('Logs', this, 'blue')">Logs</button>
+    <button class="tabLink" onclick="openPage('Terminal', this, 'orange')">Terminal</button>
 
     <div id="Users" class="tabContent"></div>
     <div id="Views" class="tabContent"></div>
@@ -69,7 +69,7 @@ exports.logs_get = (req, res) => {
 
             const logElement = {title: log.split('.')[0], 
                                  size: formatFileSize(stat.size),
-                                 date: stat.birthtime}
+                                 date: stat.birthtime.toLocaleTimeString()}
             resolve(logElement);
           });
         })
@@ -109,7 +109,7 @@ exports.views_get = (req, res) => {
 
             const viewElement = {title: view.split('.')[0], 
                                  size: formatFileSize(stat.size),
-                                 date: stat.birthtime}
+                                 date: stat.birthtime.toLocaleDateString() + ' (' + stat.birthtime.toLocaleTimeString() + ')'}
             resolve(viewElement);
           });
         })
