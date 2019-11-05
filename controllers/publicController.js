@@ -19,10 +19,10 @@ exports.remove = (view) => {
 
 exports.index = (req, res) => {
   const view = appRoot + '/views/' + req.baseUrl.substr(1) + '.html';
-  if (!view) return;
+  if (!view) return record(`ERROR : "${view}" is not a proper an html element -> STOPPED`);
   // ISSUE : Conflic with existing page, routes
   res.sendFile(view, (err) => {
-    if (err) return res.status(404).send("Désolé, cette page n'existe pas ! <a href='/'><button>Sortie</button></a>");
+    if (err) return res.status(500).send("Désolé, redirection impossible !");
   });
 };
 
