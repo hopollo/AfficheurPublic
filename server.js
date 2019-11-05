@@ -21,6 +21,7 @@ const app = express();
 const port = config.server.port || 5000;
 const enableMongoDB = config.server.enableMongoDB || false;
 
+app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
