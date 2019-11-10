@@ -102,12 +102,13 @@ socket.on('ContentUpdated', () => {
 
 StartSliding();
 StartHorloge();
+ToggleCursorDisplay();
 	
 function StartSliding() {
-	var interval = 8000;
+	var interval = 8; //seconds
 	var currentSection = 0;
 	var section = document.getElementsByTagName('section');
-	var slideInterval = setInterval(nextSection, interval);
+	var slideInterval = setInterval(nextSection, interval * 1000);
 	
 	//Hack to start from the first and not 0 as 1 and 1+1=2 (so the second section);
 	section[currentSection].className = 'current';
@@ -139,5 +140,18 @@ function StartHorloge() {
 
 			document.getElementById('horloge').innerHTML = cejour + ' | ' + hours + ':' + minutes + ':' + seconds;
 		}
+}
+
+// This feature allows to only display cursor one the page when mouse is used
+function ToggleCursorDisplay() {
+  let timeout;
+
+  document.onmousemove = () => {
+    document.querySelector('body').style.cursor = 'pointer';
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      document.querySelector('body').style.cursor = 'none';
+    }, 300);
+  }
 }
 </script>
