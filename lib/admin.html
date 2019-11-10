@@ -156,7 +156,6 @@
 
             createUserDiv.addEventListener("input", () => {
               // TODO : HoPollo Tweak feature to disable back button if pass under limit
-              console.log('Typing');
               if (createUserPassInput.value.length   >= 4 &&
                   createUserNameInput.value.length   >= 3 &&
                   createUserAccessInput.value.length >= 1) createUserButton.removeAttribute('disabled');
@@ -190,9 +189,25 @@
             const userAccess = document.createElement('td');
             userAccess.appendChild(document.createTextNode(user.access));
             const userActions = document.createElement('td');
+
+            const editButton = document.createElement('button');
+            editButton.className = 'editButton';
+            editButton.innerHTML = 'Edit';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.innerHTML = 'Delete';
+
+            if (user.access !== '*') {
+              userActions.appendChild(editButton);
+              userActions.appendChild(deleteButton);
+            } else {
+              userActions.appendChild(document.createTextNode('SuperAdmin only'));
+            }
             
             userElement.appendChild(userId);
             userElement.appendChild(userAccess);
+            userElement.appendChild(userActions);
             
             usersTabContainer.appendChild(userElement);
             document.getElementById('Users').appendChild(usersTabContainer);
@@ -221,10 +236,9 @@
     }
 
     function deleteFetch(element) {
-      console.log(element.parentElement);
       const userToRemove = {
-        name: element.parentElement.childNodes[0].data,
-        access: element.parentElement.childNodes[1].data
+        name: element.parentElement.parentElement.children[0].innerHTML,
+        access: element.parentElement.parentElement.children[1].innerHTML
       }
       
       fetch('admin/user', { 
@@ -264,7 +278,7 @@
           tabRows.appendChild(dateTitle);
           tabRows.appendChild(sizeTitle);
           tabRows.appendChild(actionsTitle);
-
+          
           viewsTabContainer.appendChild(tabRows);
 
           for (const view of views) {
@@ -277,6 +291,26 @@
             const viewDate = document.createElement('td');
             viewDate.appendChild(document.createTextNode(view.date));
             const viewActions = document.createElement('td');
+
+            const redirectAction = document.createElement('a');
+            const redirectButton = document.createElement('button');
+            redirectAction.appendChild(redirectButton);
+            redirectAction.href = `/${view.title}`;
+            redirectAction.target = '_blank';
+            redirectButton.innerHTML = 'Open';
+            redirectButton.id = 'redirectButton';
+
+            const rebuildAction = document.createElement('button');
+            rebuildAction.id = 'rebuildButton';
+            rebuildAction.innerHTML = 'Rebuild';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.innerHTML = 'Delete';
+
+            viewActions.appendChild(redirectAction);
+            viewActions.appendChild(rebuildAction);
+            viewActions.appendChild(deleteButton);            
             
             viewElement.appendChild(viewTitle);
             viewElement.appendChild(viewDate);
@@ -326,6 +360,21 @@
             const logDate = document.createElement('td');
             logDate.appendChild(document.createTextNode(log.date));
             const logActions = document.createElement('td');
+
+            const redirectAction = document.createElement('a');
+            const redirectButton = document.createElement('button');
+            redirectAction.appendChild(redirectButton);
+            redirectAction.href = `/${log.title}`;
+            redirectAction.target = '_blank';
+            redirectButton.innerHTML = 'Open';
+            redirectButton.id = 'redirectButton';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.innerHTML = 'Delete';
+
+            logActions.appendChild(redirectAction);
+            logActions.appendChild(deleteButton);
             
             logElement.appendChild(logTitle);
             logElement.appendChild(logDate);
@@ -352,9 +401,10 @@
     }
 
     document.addEventListener('click', (e) => {
+      console.log('Button clicked', e.target.className);
       if(e.target && !e.target.className.includes('Button')) return;
       switch(e.target.className) {
-        case 'delButton':
+        case 'deleteButton':
             deleteFetch(e.target);
           break;
         case 'editButton':
