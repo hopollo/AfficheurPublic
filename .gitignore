@@ -6,3 +6,5 @@ views/*
 backups
 data/*
 .rest
+data/afficheurdb.json
+index.html
