@@ -1,10 +1,6 @@
 .env
 .vscode
-logs/*
-node_modules
-views/*
-backups
-data/*
-.rest
-data/afficheurdb.json
+node_modules/
+backups/
+*.rest
 index.html
