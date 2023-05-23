@@ -22,7 +22,8 @@ const port = config.server.port || 5000;
 const enableMongoDB = config.server.enableMongoDB || false;
 
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use('/', indexRouter);
@@ -50,9 +51,9 @@ server.listen(port, () => {
     sendRefreshToClients();
   }, 20 * 1000);
   
-  watch(__dirname + '/public', { recursive: true }, async (event, filename) => {
+  watch(path.join(__dirname, 'public'), { recursive: true }, async (event, filename) => {
     record(`Modifications: (${event}) "${filename}"`);
-    const page= filename.split('/public/')[1].split('/')[0];
+    const page = filename.split('/public/')[1].split('/')[0];
     if (event === 'remove') return publicController.remove(page);
     publicController.build(page);
     sendRefreshToClients();

@@ -12,7 +12,7 @@
       color: white;
       font-weight: bold;
     }
-    div > * { display: block; }
+    div form > * { display: block; }
     h3 { color: red; }
     
     #createUserDiv {
@@ -58,10 +58,15 @@
 <body>
   <div>
     <h1>Admin Panel :</h1>
-    Identifiant : <input id='idInput' type="text">
-    Mot de passe : <input id='passInput' type="password">
-
-    <button id='sendButton' type="submit" disabled="">Valider</button>
+    <form>
+      <label for="idInput">Identifiant :</label>
+      <input id='idInput' type="text" placeholder="Identifiant">
+      
+      <label for="passInput">Mot de passe :</label>
+      <input id='passInput' type="password" placeholder="Mot de passe">
+      
+      <button id='sendButton' type="submit" disabled="">Valider</button>
+    </form>
   </div>
   <h3 id="fetchResult"></h3>
   <script>
@@ -76,7 +81,9 @@
           idInput.value.length >= 3) sendButton.removeAttribute('disabled');
     });
 
-    sendButton.onclick = () => {
+    sendButton.onclick = (e) => {
+      e.preventDefault();
+
       fetch('admin/menu', {
         headers : {
           authorization: `${idInput.value}|${passInput.value}`
